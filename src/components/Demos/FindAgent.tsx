@@ -89,15 +89,15 @@ export default function FindAgent() {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div className="min-h-screen px-6 py-12 max-w-6xl mx-auto">
-      <header className="mb-6 text-center">
-        <h1 className="text-3xl font-semibold">Find an Agent</h1>
+    <div className="min-h-screen px-4 sm:px-6 py-8 sm:py-12 max-w-6xl mx-auto">
+      <header className="mb-4 sm:mb-6 text-center">
+        <h1 className="text-2xl sm:text-3xl font-semibold">Find an Agent</h1>
         <p className="text-gray-600 mt-1">
           Click a city pin to view contact details.
         </p>
       </header>
 
-      <div className="grid md:grid-cols-[2fr_1fr] gap-8 items-start">
+      <div className="grid md:grid-cols-[2fr_1fr] gap-6 sm:gap-8 items-start">
         {/* Map box */}
         <div className="relative w-full border border-gray-200 shadow select-none">
           {/* Maintain tall NZ aspect */}
@@ -190,7 +190,7 @@ function Pin({
       type="button"
       onClick={onClick}
       title={label}
-      className="group absolute -translate-x-1/2 -translate-y-1/2 focus:outline-none transform transition duration-200 hover:scale-110 active:scale-125 z-20"
+      className="group absolute -translate-x-1/2 -translate-y-1/2 focus:outline-none transform transition duration-200 hover:scale-110 active:scale-125 z-20 touch-manipulation"
       style={{ left: `${xPct}%`, top: `${yPct}%` }}
       aria-pressed={active}
       aria-label={`Open details for ${label}`}
@@ -312,7 +312,7 @@ function MapPopover({
       >
         <div
           ref={panelRef}
-          className="bg-white border border-gray-200 shadow-xl p-4 w-96"
+          className="bg-white border border-gray-200 shadow-xl p-4 w-[min(92vw,24rem)] sm:w-96"
         >
           {children}
           <div className="mt-4 flex gap-2">

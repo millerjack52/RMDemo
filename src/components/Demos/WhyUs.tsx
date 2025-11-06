@@ -131,13 +131,13 @@ export default function WhyUs() {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       {/* HERO */}
-      <section className="flex items-center justify-center py-24">
+      <section className="flex items-center justify-center py-16 sm:py-24">
         <div className="text-left">
-          <h1 className="text-[100px] font-light leading-[65px]">
+          <h1 className="text-[56px] leading-[44px] sm:text-[100px] sm:leading-[65px] font-light">
             <span className="block">WHY</span>
 
             {/* US + logo, with slight overlap */}
-            <span className="relative block leading-[70px]">
+            <span className="relative block leading-[48px] sm:leading-[70px]">
               <span className="text-orange-500 font-light">US</span>
 
               {/* Logo positioned over the right side of “US” */}
@@ -152,26 +152,34 @@ export default function WhyUs() {
       </section>
 
       {/* GRID */}
-      <div className="max-w-6xl mx-auto grid gap-4 px-6 pb-20">
+      <div className="max-w-6xl mx-auto grid gap-4 px-4 sm:px-6 pb-16 sm:pb-20">
         {rows.map((row, rIdx) => (
-          <div key={rIdx} className="flex gap-4">
+          <div
+            key={rIdx}
+            className="flex flex-col md:flex-row md:flex-nowrap gap-4"
+          >
             {row.boxes.map((box, bIdx) => {
               const index = rIdx * 2 + bIdx;
               return (
-                <WhyUsBox
+                <div
                   key={index}
-                  index={index}
-                  expandedIndex={expandedIndex}
-                  setExpandedIndex={setExpandedIndex}
-                  rowIndex={rIdx}
-                  expandedRowIndex={expandedRowIndex}
-                  title={box.title}
-                  subtitle={box.subtitle}
-                  width={box.w}
-                  bgUrl={box.bg}
-                  renderExpanded={box.renderExpanded}
-                  grayscaleWhenCollapsed
-                />
+                  className="w-full md:w-auto"
+                  style={{ flexBasis: "auto", width: "100%" }}
+                >
+                  <WhyUsBox
+                    index={index}
+                    expandedIndex={expandedIndex}
+                    setExpandedIndex={setExpandedIndex}
+                    rowIndex={rIdx}
+                    expandedRowIndex={expandedRowIndex}
+                    title={box.title}
+                    subtitle={box.subtitle}
+                    width={box.w} // respected on md+ via internal styles; mobile stacks full width
+                    bgUrl={box.bg}
+                    renderExpanded={box.renderExpanded}
+                    grayscaleWhenCollapsed
+                  />
+                </div>
               );
             })}
           </div>
@@ -196,8 +204,8 @@ function ExpandedPanel({
   image: string;
 }) {
   return (
-    <div className="w-full h-full flex flex-col md:flex-row items-center justify-between gap-8">
-      <div className="max-w-[60%]">
+    <div className="w-full h-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
+      <div className="w-full md:max-w-[60%]">
         <div className="text-small">{tag}</div>
         <h2 className="text-heading text-orange-500 mt-2 mb-3">{heading}</h2>
         <p className="text-body text-gray-700 mb-4">{body}</p>
@@ -209,15 +217,14 @@ function ExpandedPanel({
         </a>
       </div>
 
-      <div className="relative w-[300px] h-[400px] ml-auto mr-10">
+      <div className="relative w-full max-w-[360px] h-[280px] md:w-[300px] md:h-[400px] md:ml-auto md:mr-10">
         <img
           src={image}
           alt=""
           className="w-full h-full object-cover grayscale"
         />
-
         {/* Border overlay */}
-        <div className="absolute inset-0 border-[35px] border-orange-500/70 pointer-events-none"></div>
+        <div className="absolute inset-0 border-[20px] md:border-[35px] border-orange-500/70 pointer-events-none"></div>
       </div>
     </div>
   );

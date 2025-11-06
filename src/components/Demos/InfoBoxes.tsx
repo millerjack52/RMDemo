@@ -4,18 +4,20 @@ function clsx(...parts: Array<string | undefined | false>) {
 
 function MissionHero({ eyebrow, title, highlight, body, bullets, image }: any) {
   return (
-    <section className="grid md:grid-cols-2 gap-8 items-center">
+    <section className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
       <div>
         {eyebrow && (
-          <div className="text-orange-600 font-semibold text-sm mb-3">
+          <div className="text-orange-600 font-semibold text-xs sm:text-sm mb-2 sm:mb-3">
             {eyebrow}
           </div>
         )}
-        <h2 className="text-4xl font-semibold leading-tight mb-3">
+        <h2 className="text-3xl sm:text-4xl font-semibold leading-tight mb-2 sm:mb-3">
           {title}, <span className="text-orange-600">{highlight}</span>
         </h2>
-        <p className="text-gray-600 max-w-prose mb-6">{body}</p>
-        <div className="space-y-4">
+        <p className="text-gray-600 max-w-prose mb-5 sm:mb-6 text-sm sm:text-base">
+          {body}
+        </p>
+        <div className="space-y-3 sm:space-y-4">
           {bullets?.map((b: any, i: number) => (
             <div key={i}>
               <div className="font-semibold text-gray-900">{b.title}</div>
@@ -24,14 +26,17 @@ function MissionHero({ eyebrow, title, highlight, body, bullets, image }: any) {
           ))}
         </div>
       </div>
-      <div className="relative">
-        <img
-          src={image.src}
-          alt={image.alt || ""}
-          className="w-full object-cover shadow"
-        />
-        <div className="absolute -top-6 left-10 w-28 h-28 bg-orange-600/40" />
-        <div className="absolute -bottom-6 right-6 w-16 h-16 bg-gray-400/30" />
+      <div className="relative order-first md:order-none">
+        <div className="relative w-full aspect-[4/3] sm:aspect-auto">
+          <img
+            src={image.src}
+            alt={image.alt || ""}
+            className="w-full h-full object-cover shadow"
+          />
+          {/* decorative blocks */}
+          <div className="absolute -top-4 sm:-top-6 left-6 sm:left-10 w-20 h-20 sm:w-28 sm:h-28 bg-orange-600/40" />
+          <div className="absolute -bottom-4 sm:-bottom-6 right-4 sm:right-6 w-12 h-12 sm:w-16 sm:h-16 bg-gray-400/30" />
+        </div>
       </div>
     </section>
   );
@@ -40,22 +45,22 @@ function MissionHero({ eyebrow, title, highlight, body, bullets, image }: any) {
 function PeopleGrid({ eyebrow, title, highlight, subtitle, people }: any) {
   return (
     <section>
-      <div className="text-center max-w-3xl mx-auto mb-8">
+      <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8 px-2">
         {eyebrow && (
-          <div className="text-orange-600 font-semibold text-sm mb-2">
+          <div className="text-orange-600 font-semibold text-xs sm:text-sm mb-1.5 sm:mb-2">
             {eyebrow}
           </div>
         )}
-        <h2 className="text-3xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-semibold">
           {title} <span className="text-orange-600">{highlight}</span>
         </h2>
-        <p className="text-gray-600 mt-2">{subtitle}</p>
+        <p className="text-gray-600 mt-2 text-sm sm:text-base">{subtitle}</p>
       </div>
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {people.map((p: any, i: number) => (
           <div
             key={i}
-            className="relative border border-orange-300 bg-white shadow-sm hover:shadow transition p-4 transform hover:scale-105 duration-300 ease-in-out"
+            className="group relative border border-orange-300 bg-white shadow-sm hover:shadow transition p-4 transform hover:scale-105 duration-300 ease-in-out"
           >
             <div className="relative overflow-hidden aspect-[4/5] mb-4">
               <img
@@ -68,9 +73,9 @@ function PeopleGrid({ eyebrow, title, highlight, subtitle, people }: any) {
               <div className="absolute top-3 left-3 w-10 h-10 bg-gray-300/50" />
               <div className="absolute bottom-3 right-3 w-10 h-10 bg-gray-300/50" />
             </div>
-            <div className="text-center">
-              <div className="text-2xl">{p.name}</div>
-              <div className="text-orange-600 font-semibold text-xs tracking-wide mt-1">
+            <div className="text-center px-1">
+              <div className="text-xl sm:text-2xl">{p.name}</div>
+              <div className="text-orange-600 font-semibold text-[10px] sm:text-xs tracking-wide mt-1">
                 {p.role}
               </div>
               <p className="text-gray-600 text-sm mt-3">{p.blurb}</p>
@@ -85,17 +90,17 @@ function PeopleGrid({ eyebrow, title, highlight, subtitle, people }: any) {
 function PromoRow({ items }: any) {
   return (
     <section>
-      <div className="text-center mb-6">
-        <p className="text-gray-700">
+      <div className="text-center mb-4 sm:mb-6 px-2">
+        <p className="text-gray-700 text-sm sm:text-base">
           Find out what makes us{" "}
           <span className="text-orange-600">different</span>.
         </p>
       </div>
-      <div className="grid md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         {items.map((item: any, i: number) => (
           <div
             key={i}
-            className="group relative overflow-hidden h-64 shadow transform transition duration-300 ease-in-out hover:scale-105"
+            className="group relative overflow-hidden h-56 sm:h-64 shadow transform transition duration-300 ease-in-out hover:scale-105"
           >
             <img
               src={item.image}
@@ -104,17 +109,19 @@ function PromoRow({ items }: any) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20 transition-opacity duration-300 group-hover:from-black/80 group-hover:via-black/50 group-hover:to-black/30" />
             <div className="pointer-events-none absolute inset-0 bg-orange-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative h-full p-6 flex flex-col justify-end text-white">
+            <div className="relative h-full p-4 sm:p-6 flex flex-col justify-end text-white">
               <h3
                 className={clsx(
                   "font-semibold transition-colors duration-300 group-hover:text-orange-500",
-                  i === 0 ? "text-3xl" : "text-2xl"
+                  i === 0 ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
                 )}
               >
                 {item.title}
               </h3>
-              <p className="text-white/80 text-sm mt-2 max-w-sm">{item.desc}</p>
-              <div className="mt-2 text-orange-400 text-sm font-medium opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <p className="text-white/80 text-xs sm:text-sm mt-2 max-w-sm">
+                {item.desc}
+              </p>
+              <div className="mt-2 text-orange-400 text-xs sm:text-sm font-medium opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 See more &gt;&gt;
               </div>
             </div>
@@ -127,7 +134,7 @@ function PromoRow({ items }: any) {
 
 export default function InfoBoxes() {
   return (
-    <div className="min-h-screen px-6 py-12 max-w-6xl mx-auto space-y-16">
+    <div className="min-h-screen px-4 sm:px-6 py-8 sm:py-12 max-w-6xl mx-auto space-y-12 sm:space-y-16">
       <MissionHero
         eyebrow="OUR MISSION"
         title="Protecting Every Worker"

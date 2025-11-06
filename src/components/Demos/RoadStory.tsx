@@ -20,8 +20,8 @@ type RoadStoryProps = {
 };
 
 const SAMPLES = 1400; // for length sampling
-const CARD_W = 320;
-const ROAD_GAP = 120; // px distance from road centerline to card column
+const BASE_CARD_W = 320; // desktop target width
+const BASE_ROAD_GAP = 120; // px distance from road centerline to card column (desktop)
 const V_NUDGE = 0; // keep 0; we center with translateY(-50%)
 
 export default function RoadStory({
@@ -67,6 +67,12 @@ export default function RoadStory({
   const [visible, setVisible] = useState<boolean[]>(() =>
     milestones.map(() => false)
   );
+
+  // Responsive metrics for mobile without changing the look on desktop
+  const [metrics, setMetrics] = useState(() => ({
+    cardW: BASE_CARD_W,
+    gap: BASE_ROAD_GAP,
+  }));
 
   const viewBox = { w: 760, h: Math.max(topY + heightY + 120, 900) };
   const centerX = viewBox.w / 2;
@@ -125,7 +131,8 @@ export default function RoadStory({
     const ro = new ResizeObserver(() => {
       requestAnimationFrame(() => {
         const p = pathRef.current;
-        if (!p) return;
+        const frame = frameRef.current;
+        if (!p || !frame) return;
         const L = p.getTotalLength();
         setPathLen(L);
 
@@ -143,6 +150,20 @@ export default function RoadStory({
           return hit ? hit.len : L;
         });
         setAnchorLens(lens);
+
+        // --- Responsive metrics ---
+        const frameWidth = frame.getBoundingClientRect().width;
+        // Card width scales down on small screens, but never below 240px.
+        const cardW = Math.max(
+          240,
+          Math.min(BASE_CARD_W, Math.floor(frameWidth * 0.86))
+        );
+        // Gap scales a bit so columns breathe on phones.
+        const gap = Math.max(
+          64,
+          Math.min(BASE_ROAD_GAP, Math.floor(frameWidth * 0.18))
+        );
+        setMetrics({ cardW, gap });
       });
     });
     ro.observe(frameRef.current);
@@ -203,12 +224,12 @@ export default function RoadStory({
   const cardData = useMemo(() => {
     const svg = svgRef.current;
     const frame = frameRef.current;
-    if (!svg || !frame) return [];
+    if (!svg || !frame) return [] as Array<any>;
 
     // Columns anchored off the SVG's center in CSS px
     const centerPx = svgToLocal(svg, frame, centerX, 0).x;
-    const colLeft = centerPx - ROAD_GAP - CARD_W;
-    const colRight = centerPx + ROAD_GAP;
+    const colLeft = centerPx - metrics.gap - metrics.cardW;
+    const colRight = centerPx + metrics.gap;
 
     return milestones.map((ms, i) => {
       const lenAt = anchorLens[i] ?? 0;
@@ -230,7 +251,7 @@ export default function RoadStory({
 
       return { ms, card: { left, top, side }, leader };
     });
-  }, [samples, anchorLens, milestones, centerX]);
+  }, [samples, anchorLens, milestones, centerX, metrics.cardW, metrics.gap]);
 
   return (
     <section
@@ -240,23 +261,26 @@ export default function RoadStory({
       aria-labelledby="roadstory-heading"
     >
       <div className="sticky top-0">
-        <div className="max-w-5xl mx-auto px-6 pt-10 pb-4 text-center">
-          <p className="text-xs font-bold tracking-[.14em] text-orange-500">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 sm:pt-10 pb-4 text-center">
+          <p className="text-[10px] sm:text-xs font-bold tracking-[.14em] text-orange-500">
             OUR STORY
           </p>
           <h2
             id="roadstory-heading"
-            className="text-3xl md:text-4xl font-bold text-gray-900 mt-1"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mt-1"
           >
             The Road to Where We Are
           </h2>
         </div>
 
-        <div className="relative max-w-5xl mx-auto px-4 pb-12" ref={frameRef}>
+        <div
+          className="relative max-w-5xl mx-auto px-3 sm:px-4 pb-10 sm:pb-12"
+          ref={frameRef}
+        >
           <svg
             ref={svgRef}
             viewBox={`0 0 ${viewBox.w} ${viewBox.h}`}
-            className="w-full h-[70vh] md:h-[78vh] mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.06)]"
+            className="w-full h-[64vh] sm:h-[70vh] md:h-[78vh] mx-auto drop-shadow-[0_40px_60px_rgba(0,0,0,0.06)]"
             role="img"
             aria-hidden="true"
           >
@@ -337,11 +361,17 @@ export default function RoadStory({
             {cardData.map((c, i) => (
               <li
                 key={`card-${i}`}
-                className="absolute w-[320px] bg-white border border-gray-300 shadow-[0_8px_24px_rgba(0,0,0,.12)] rounded-sm p-4 will-change-transform transition-all duration-400"
+                className="absolute bg-white border border-gray-300 shadow-[0_8px_24px_rgba(0,0,0,.12)] p-4 will-change-transform transition-all duration-400"
                 style={{
-                  left: clampPx(c.card.left, 8, "calc(100% - 328px)"),
+                  width: `${metrics.cardW}px`,
+                  left: clampPx(
+                    c.card.left,
+                    8,
+                    `calc(100% - ${metrics.cardW + 8}px)`
+                  ),
                   top: clampPx(c.card.top, 8, "calc(100% - 8px)"),
                   opacity: visible[i] ? 1 : 0,
+                  transform: "translateY(-50%)",
                 }}
               >
                 <div className="flex items-center gap-2 text-sm text-gray-700">
@@ -375,7 +405,7 @@ function nearestSample(
   samples: { len: number; x: number; y: number }[],
   targetLen: number
 ) {
-  if (!samples.length) return { x: 0, y: 0, len: 0 };
+  if (!samples.length) return { x: 0, y: 0, len: 0 } as any;
   let lo = 0,
     hi = samples.length - 1;
   while (lo < hi) {

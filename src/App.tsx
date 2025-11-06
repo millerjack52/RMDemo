@@ -9,29 +9,45 @@ import FindAgent from "./components/Demos/FindAgent";
 export default function App() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <header className="p-6 border-b border-gray-200 flex justify-between items-center">
-        <h1 className="font-bold text-lg">Road Materials Component Demos</h1>
-        <img src="images/picturelogoblack.png" alt="Logo" className="h-8 w-8" />
-        <nav className="space-x-4">
-          <Link to="/" className="hover:text-orange-500">
-            Home
-          </Link>
-          <Link to="/our-journey" className="hover:text-orange-500">
-            Our Journey
-          </Link>
-          <Link to="/why-us" className="hover:text-orange-500">
-            Why Us
-          </Link>
-          <Link to="/road-story" className="hover:text-orange-500">
-            Our Story
-          </Link>
-          <Link to="/find-agent" className="hover:text-orange-500">
-            Find an Agent
-          </Link>
-        </nav>
+      <header className="p-4 sm:p-6 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          {/* Brand */}
+          <div className="flex items-center gap-3">
+            <img
+              src="/images/picturelogoblack.png"
+              alt="Logo"
+              className="h-8 w-8"
+            />
+            <h1 className="font-bold text-lg">
+              Road Materials Component Demos
+            </h1>
+          </div>
+
+          {/* Nav */}
+          <nav className="flex flex-wrap justify-center gap-x-5 gap-y-2">
+            <Link to="/" className="hover:text-orange-500">
+              Home
+            </Link>
+            <Link to="/our-journey" className="hover:text-orange-500">
+              Our Journey
+            </Link>
+            <Link to="/why-us" className="hover:text-orange-500">
+              Why Us
+            </Link>
+            <Link to="/road-story" className="hover:text-orange-500">
+              Our Story
+            </Link>
+            <Link to="/find-agent" className="hover:text-orange-500">
+              Find an Agent
+            </Link>
+            <Link to="/info-boxes" className="hover:text-orange-500">
+              Info Boxes
+            </Link>
+          </nav>
+        </div>
       </header>
 
-      <main className="p-8">
+      <main className="p-6 sm:p-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/our-journey" element={<OurJourney />} />
