@@ -14,7 +14,6 @@ type RowConfig = { boxes: BoxConfig[] };
 export default function WhyUs() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-  // Your data: customize title, width, background, and expanded content per box
   const rows: RowConfig[] = useMemo(
     () => [
       {
@@ -124,27 +123,22 @@ export default function WhyUs() {
     []
   );
 
-  // If a box is open, determine its row index so we can collapse only its siblings
   const expandedRowIndex =
     expandedIndex === null ? null : Math.floor(expandedIndex / 2);
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       {/* HERO */}
-      <section className="flex items-center justify-center py-24">
+      <section className="flex items-center justify-center py-24 px-4 sm:px-6 md:px-0">
         <div className="text-left">
-          <h1 className="text-[100px] font-light leading-[65px]">
+          <h1 className="text-[60px] sm:text-[80px] md:text-[100px] font-light leading-[55px] sm:leading-[60px] md:leading-[65px]">
             <span className="block">WHY</span>
-
-            {/* US + logo, with slight overlap */}
-            <span className="relative block leading-[70px]">
+            <span className="relative block leading-[60px] sm:leading-[65px] md:leading-[70px]">
               <span className="text-orange-500 font-light">US</span>
-
-              {/* Logo positioned over the right side of “US” */}
               <img
-                src="/images/picturelogoblack.png" // ← update path
+                src="/images/picturelogoblack.png"
                 alt="Company logo"
-                className="absolute bottom-0 left-[calc(100%-1em)] h-[0.7em] w-auto translate-y-[4px]"
+                className="absolute bottom-0 left-[calc(100%-0.8em)] md:left-[calc(100%-1em)] h-[0.6em] md:h-[0.7em] w-auto translate-y-[3px] md:translate-y-[4px]"
               />
             </span>
           </h1>
@@ -152,26 +146,27 @@ export default function WhyUs() {
       </section>
 
       {/* GRID */}
-      <div className="max-w-6xl mx-auto grid gap-4 px-6 pb-20">
+      <div className="max-w-6xl mx-auto grid gap-4 px-4 md:px-6 pb-20">
         {rows.map((row, rIdx) => (
-          <div key={rIdx} className="flex gap-4">
+          <div key={rIdx} className="flex flex-col md:flex-row gap-4">
             {row.boxes.map((box, bIdx) => {
               const index = rIdx * 2 + bIdx;
               return (
-                <WhyUsBox
-                  key={index}
-                  index={index}
-                  expandedIndex={expandedIndex}
-                  setExpandedIndex={setExpandedIndex}
-                  rowIndex={rIdx}
-                  expandedRowIndex={expandedRowIndex}
-                  title={box.title}
-                  subtitle={box.subtitle}
-                  width={box.w}
-                  bgUrl={box.bg}
-                  renderExpanded={box.renderExpanded}
-                  grayscaleWhenCollapsed
-                />
+                <div key={index} className="block w-full md:contents">
+                  <WhyUsBox
+                    index={index}
+                    expandedIndex={expandedIndex}
+                    setExpandedIndex={setExpandedIndex}
+                    rowIndex={rIdx}
+                    expandedRowIndex={expandedRowIndex}
+                    title={box.title}
+                    subtitle={box.subtitle}
+                    width={box.w}
+                    bgUrl={box.bg}
+                    renderExpanded={box.renderExpanded}
+                    grayscaleWhenCollapsed
+                  />
+                </div>
               );
             })}
           </div>
@@ -181,7 +176,6 @@ export default function WhyUs() {
   );
 }
 
-/** A shared expanded panel layout you can reuse across boxes, but pass unique content per box */
 function ExpandedPanel({
   tag,
   heading,
@@ -197,10 +191,14 @@ function ExpandedPanel({
 }) {
   return (
     <div className="w-full h-full flex flex-col md:flex-row items-center justify-between gap-8">
-      <div className="max-w-[60%]">
-        <div className="text-small">{tag}</div>
-        <h2 className="text-heading text-orange-500 mt-2 mb-3">{heading}</h2>
-        <p className="text-body text-gray-700 mb-4">{body}</p>
+      <div className="w-full md:max-w-[60%]">
+        <div className="text-xs md:text-small uppercase">{tag}</div>
+        <h2 className="text-xl sm:text-2xl md:text-heading text-orange-500 mt-2 mb-3">
+          {heading}
+        </h2>
+        <p className="text-sm sm:text-base md:text-body text-gray-700 mb-4">
+          {body}
+        </p>
         <a
           href="#"
           className="inline-block mt-2 font-semibold text-gray-800 hover:text-orange-500"
@@ -208,16 +206,13 @@ function ExpandedPanel({
           {cta}
         </a>
       </div>
-
-      <div className="relative w-[300px] h-[400px] ml-auto mr-10">
+      <div className="relative w-full max-w-[300px] sm:max-w-[350px] md:w-[300px] md:h-[400px] md:ml-auto md:mr-10">
         <img
           src={image}
           alt=""
           className="w-full h-full object-cover grayscale"
         />
-
-        {/* Border overlay */}
-        <div className="absolute inset-0 border-[35px] border-orange-500/70 pointer-events-none"></div>
+        <div className="absolute inset-0 border-[12px] md:border-[35px] border-orange-500/70 pointer-events-none"></div>
       </div>
     </div>
   );
