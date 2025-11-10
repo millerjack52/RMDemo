@@ -6,7 +6,7 @@ type BoxConfig = {
   subtitle: string;
   w: string; // e.g. "65%"
   bg: string;
-  renderExpanded: () => React.ReactNode; // each box customizes its own content!
+  renderExpanded: () => React.ReactNode;
 };
 
 type RowConfig = { boxes: BoxConfig[] };
@@ -152,6 +152,7 @@ export default function WhyUs() {
             {row.boxes.map((box, bIdx) => {
               const index = rIdx * 2 + bIdx;
               return (
+                // Important: wrapper disappears on desktop so widths (65/35 etc.) are unchanged
                 <div key={index} className="block w-full md:contents">
                   <WhyUsBox
                     index={index}
@@ -176,6 +177,7 @@ export default function WhyUs() {
   );
 }
 
+/** Expanded content — mobile fills width/flows, desktop unchanged */
 function ExpandedPanel({
   tag,
   heading,
@@ -191,9 +193,12 @@ function ExpandedPanel({
 }) {
   return (
     <div className="w-full h-full flex flex-col md:flex-row items-center justify-between gap-8">
+      {/* Text: full width on mobile, 60% cap on desktop */}
       <div className="w-full md:max-w-[60%]">
-        <div className="text-xs md:text-small uppercase">{tag}</div>
-        <h2 className="text-xl sm:text-2xl md:text-heading text-orange-500 mt-2 mb-3">
+        <div className="text-xs tracking-wide md:text-small uppercase text-gray-500">
+          {tag}
+        </div>
+        <h2 className="text-2xl sm:text-3xl md:text-heading text-orange-500 mt-2 mb-3">
           {heading}
         </h2>
         <p className="text-sm sm:text-base md:text-body text-gray-700 mb-4">
@@ -201,18 +206,20 @@ function ExpandedPanel({
         </p>
         <a
           href="#"
-          className="inline-block mt-2 font-semibold text-gray-800 hover:text-orange-500"
+          className="inline-block mt-2 font-semibold text-gray-800 hover:text-orange-500 text-sm sm:text-base"
         >
           {cta}
         </a>
       </div>
-      <div className="relative w-full max-w-[300px] sm:max-w-[350px] md:w-[300px] md:h-[400px] md:ml-auto md:mr-10">
+
+      {/* Image: full width on mobile; fixed framed box on desktop */}
+      <div className="relative w-full md:w-[300px] md:h-[400px] md:ml-auto md:mr-10 mt-6 md:mt-0 aspect-[3/4] md:aspect-auto">
         <img
           src={image}
           alt=""
           className="w-full h-full object-cover grayscale"
         />
-        <div className="absolute inset-0 border-[12px] md:border-[35px] border-orange-500/70 pointer-events-none"></div>
+        <div className="absolute inset-0 border-[14px] md:border-[35px] border-orange-500/70 pointer-events-none"></div>
       </div>
     </div>
   );

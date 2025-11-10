@@ -22,7 +22,7 @@
 
   /* Paragraph text */
   .text-body {
-    @apply text-base md:text-lg font-normal text-gray-100 leading-relaxed;
+    @apply text-base md:text-lg font-normal text-black leading-relaxed;
   }
 
   /* Small meta text or labels */
